@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trần Đăng Trung Kiên — Portfolio</title>
+  <meta name="description" content="Portfolio của Trần Đăng Trung Kiên — Sinh viên Kinh tế quốc tế, Đại học Ngoại thương">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Trần Đăng Trung Kiên — Portfolio">
+  <meta property="og:description" content="Sinh viên Kinh tế quốc tế – Đại học Ngoại thương">
+  <meta property="og:type" content="website">
+
+  <!-- Preconnect Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap&subset=vietnamese,latin" rel="stylesheet">
+
+  <!-- Favicon: Gargantua Black Hole icon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%2305070f'/%3E%3Cellipse cx='16' cy='16' rx='13' ry='5' fill='none' stroke='%23e8a04c' stroke-width='2' opacity='0.85'/%3E%3Ccircle cx='16' cy='16' r='6' fill='%23000000'/%3E%3Ccircle cx='16' cy='16' r='7' fill='none' stroke='%23f5f3ed' stroke-width='1.2'/%3E%3C/svg%3E">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- ══════ INITIAL MASK & CINEMATIC INTRO OVERLAY ══════ -->
+  <div id="loading-screen" aria-hidden="true">
+    <div class="loader-ring"></div>
+    <p class="loader-text">ĐANG KHỞI TẠO</p>
+  </div>
+
+  <div id="intro-overlay" class="intro-overlay" aria-hidden="true">
+    <div class="intro-hud">
+      <span class="intro-badge mono">MISSION LOG // GARGANTUA</span>
+      <h2 class="intro-title" id="intro-status-text"></h2>
+      <p class="intro-distance mono" id="intro-distance-text"></p>
+    </div>
+    <button id="intro-skip" class="intro-skip-btn" aria-label="Bỏ qua phần mở đầu" title="Bỏ qua phần mở đầu [Phím ESC]">
+      <span>BỎ QUA [ESC]</span>
+      <span class="intro-skip-icon" aria-hidden="true">↷</span>
+    </button>
+    <div id="intro-flash" class="intro-flash" aria-hidden="true"></div>
+  </div>
+
+  <script>
+    // Failsafe timeout: đảm bảo loader luôn tắt trong tối đa 3.5 giây kể cả khi mạng chậm hoặc script lỗi
+    window.__dismissLoader = function() {
+      var loader = document.getElementById('loading-screen');
+      if (loader && !loader.classList.contains('hidden')) {
+        loader.classList.add('hidden');
+      }
+      if (window.__loaderFallbackTimer) {
+        clearTimeout(window.__loaderFallbackTimer);
+        window.__loaderFallbackTimer = null;
+      }
+    };
+    window.__loaderFallbackTimer = setTimeout(window.__dismissLoader, 3500);
+  </script>
+
+  <!-- ══════ WEBGL CANVAS (Three.js sẽ render vào đây) ══════ -->
+  <canvas id="webgl-canvas" aria-hidden="true"></canvas>
+
+  <!-- ══════ FALLBACK BG (hiện nếu WebGL không hỗ trợ) ══════ -->
+  <div id="fallback-bg" aria-hidden="true"></div>
+
+  <!-- ══════ NAVIGATION ══════ -->
+  <nav id="main-nav" role="navigation" aria-label="Menu chính">
+    <a href="#hero" class="nav-logo">TDTK</a>
+    <div class="nav-controls">
+      <button id="audio-toggle" class="audio-toggle" aria-label="Bật/Tắt âm thanh không gian" title="Bật âm thanh không gian (Web Audio API)" aria-pressed="false">
+        <span class="audio-wave" aria-hidden="true">
+          <span class="audio-bar"></span>
+          <span class="audio-bar"></span>
+          <span class="audio-bar"></span>
+        </span>
+        <span class="audio-text">COMM AUDIO</span>
+      </button>
+      <button class="nav-toggle" aria-label="Mở menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <ul class="nav-links" id="nav-links">
+      <!-- Populated by main.js from CONTENT.nav -->
+    </ul>
+  </nav>
+
+  <!-- ══════ MAIN CONTENT ══════ -->
+  <main>
+
+    <!-- HERO -->
+    <section id="hero" class="section section--hero">
+      <div class="hero-content">
+        <h1 class="hero-name" id="hero-name"></h1>
+        <p class="hero-subtitle" id="hero-subtitle"></p>
+        <a href="#about" class="hero-scroll" id="hero-scroll" aria-label="Cuộn xuống">
+          <span class="hero-scroll__text"></span>
+          <span class="hero-scroll__arrow">↓</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about" class="section section--about">
+      <div class="container">
+        <header class="section-header">
+          <span class="section-label mono" id="about-label"></span>
+          <span class="section-coords mono" id="about-coords"></span>
+        </header>
+        <div class="about-grid">
+          <div class="about-bio" id="about-bio"></div>
+          <div class="about-stats" id="about-stats"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- EXPERIENCE -->
+    <section id="experience" class="section section--experience">
+      <div class="container">
+        <header class="section-header">
+          <span class="section-label mono" id="exp-label"></span>
+          <span class="section-coords mono">THỜI GIAN GIÃN NỞ · TIME DILATION</span>
+        </header>
+        <div class="timeline" id="timeline"></div>
+      </div>
+    </section>
+
+    <!-- ACTIVITIES -->
+    <section id="activities" class="section section--activities">
+      <div class="container">
+        <header class="section-header">
+          <span class="section-label mono" id="act-label"></span>
+          <span class="section-coords mono">TRẠM MODULE · DOCKING STATION ENDURANCE</span>
+        </header>
+        <div class="station-cards" id="station-cards"></div>
+      </div>
+    </section>
+
+    <!-- SKILLS -->
+    <section id="skills" class="section section--skills">
+      <div class="container">
+        <header class="section-header">
+          <span class="section-label mono" id="skills-label"></span>
+          <span class="section-coords mono" id="skills-coords">BẢN ĐỒ CHÒM SAO KỸ NĂNG · STELLAR CAPABILITIES</span>
+        </header>
+        <div class="constellation-grid" id="constellation-grid" aria-label="Bản đồ 4 chòm sao kỹ năng"></div>
+        <div class="crosslinks-panel" id="crosslinks-panel" aria-label="Mạng lưới liên kết đa chòm sao"></div>
+        <!-- Danh sách trợ năng cho người dùng đọc màn hình (Screen Reader) -->
+        <div class="visually-hidden" id="skills-accessible-list"></div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" class="section section--contact">
+      <div class="container">
+        <header class="section-header">
+          <span class="section-label mono" id="contact-label"></span>
+          <span class="section-coords mono">KÊNH TRUYỀN TIN · TRANSMISSION LINK</span>
+        </header>
+        <div class="contact-box">
+          <!-- Hiệu ứng khối siêu lập phương Tesseract 3D -->
+          <div class="tesseract-visual" aria-hidden="true">
+            <div class="tesseract-cube outer">
+              <div class="cube-face front"></div>
+              <div class="cube-face back"></div>
+              <div class="cube-face right"></div>
+              <div class="cube-face left"></div>
+              <div class="cube-face top"></div>
+              <div class="cube-face bottom"></div>
+            </div>
+            <div class="tesseract-cube inner">
+              <div class="cube-face front"></div>
+              <div class="cube-face back"></div>
+              <div class="cube-face right"></div>
+              <div class="cube-face left"></div>
+              <div class="cube-face top"></div>
+              <div class="cube-face bottom"></div>
+            </div>
+          </div>
+          <div class="contact-content">
+            <p class="contact-status mono" id="contact-status"></p>
+            <a class="contact-email" id="contact-email" href=""></a>
+            <button class="contact-copy" id="contact-copy" aria-label="Sao chép email">
+              <span id="contact-copy-text"></span>
+            </button>
+            <p class="contact-location mono" id="contact-location"></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ══════ FOOTER ══════ -->
+  <footer class="site-footer">
+    <p class="mono">© 2025 Trần Đăng Trung Kiên</p>
+  </footer>
+
+  <!-- ══════ SCRIPTS ══════ -->
+
+  <!-- Three.js via importmap (ES Module) -->
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+    }
+  }
+  </script>
+
+  <!-- GSAP + ScrollTrigger (global) -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+
+  <!-- Content — phải load trước main.js -->
+  <script src="js/content.js"></script>
+
+  <!-- App entry point (imports scene.js internally) -->
+  <script type="module" src="js/main.js"></script>
+
+  <!-- Noscript fallback -->
+  <noscript>
+    <style>
+      #loading-screen { display: none !important; }
+      #fallback-bg { display: block !important; }
+      body { background: #0a0a0f; }
+    </style>
+    <div style="color:#f0ede6;text-align:center;padding:20vh 20px;font-family:sans-serif">
+      <h1>Trần Đăng Trung Kiên</h1>
+      <p>Sinh viên Kinh tế quốc tế – Đại học Ngoại thương</p>
+      <p style="margin-top:2em">Email: trungkien1605@gmail.com</p>
+    </div>
+  </noscript>
+
+</body>
+</html>
