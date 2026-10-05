@@ -1,4 +1,4 @@
-# 🌌 Interstellar Portfolio — Trần Đăng Trung Kiên
+#  Interstellar Portfolio — Trần Đăng Trung Kiên
 
 Website Portfolio một trang (Single-Page Portfolio) chuẩn điện ảnh lấy cảm hứng từ kiệt tác khoa học viễn tưởng **Interstellar (2014)** của đạo diễn Christopher Nolan, được xây dựng dành cho **Trần Đăng Trung Kiên** — sinh viên chuyên ngành Kinh tế Quốc tế, Trường Đại học Ngoại thương (FTU).
 
@@ -6,7 +6,7 @@ Toàn bộ dự án được thiết kế và lập trình bằng **HTML5, CSS3 
 
 ---
 
-## 🚀 Điểm Nhấn Kỹ Thuật & Hiệu Ứng
+##  Điểm Nhấn Kỹ Thuật & Hiệu Ứng
 
 ### 1. Hố Đen Gargantua Chuẩn Điện Ảnh (Single-Pass Custom GLSL Shader)
 - **Kiến trúc một Shader duy nhất**: Thay vì ghép các mesh 3D phẳng cắt nhau gây lỗi clipping, toàn bộ hố đen Gargantua được dựng bằng một custom fragment shader duy nhất với tone mapping ACES Filmic.
@@ -47,7 +47,7 @@ Toàn bộ dự án được thiết kế và lập trình bằng **HTML5, CSS3 
 
 ---
 
-## 🛠️ Công Nghệ Sử Dụng
+##  Công Nghệ Sử Dụng
 
 - **HTML5 & CSS3** hiện đại (CSS Variables, Flexbox, CSS Grid, CSS 3D Transforms, Backdrop Filter).
 - **JavaScript thuần (ES Modules)** — Không cần Webpack, Vite, Babel hay bất kỳ công cụ build nào.
@@ -57,7 +57,7 @@ Toàn bộ dự án được thiết kế và lập trình bằng **HTML5, CSS3 
 
 ---
 
-## 💻 Hướng Dẫn Chạy Trên Máy Cục Bộ (Local)
+##  Hướng Dẫn Chạy Trên Máy Cục Bộ (Local)
 
 Do dự án sử dụng chuẩn **JavaScript ES Modules** (`import` / `export`), trình duyệt yêu cầu chạy qua một HTTP Server cục bộ (không mở trực tiếp tệp bằng giao thức `file://`).
 
@@ -82,7 +82,7 @@ npx serve .
 
 ---
 
-## 🌐 Hướng Dẫn Triển Khai Lên GitHub Pages
+##  Hướng Dẫn Triển Khai Lên GitHub Pages
 
 Dự án có cấu trúc tệp tĩnh hoàn toàn chuẩn mực, sẵn sàng chạy ngay trên GitHub Pages chỉ trong 2 phút:
 
@@ -109,7 +109,7 @@ Dự án có cấu trúc tệp tĩnh hoàn toàn chuẩn mực, sẵn sàng ch�
 
 ---
 
-## 📂 Cấu Trúc Thư Mục
+##  Cấu Trúc Thư Mục
 
 ```
 portfolio/
@@ -117,7 +117,7 @@ portfolio/
 ├── css/
 │   └── style.css       # Toàn bộ mã định kiểu CSS, theme Interstellar, responsive & CSS 3D
 ├── js/
-│   ├── content.js      # 📝 Toàn bộ nội dung chữ (Chỉ cần chỉnh sửa tệp này khi cập nhật CV)
+│   ├── content.js      #  Toàn bộ nội dung chữ (Chỉ cần chỉnh sửa tệp này khi cập nhật CV)
 │   ├── scene.js        # Three.js WebGL: GLSL Gargantua shader, starfield, meteors, warp
 │   └── main.js         # Khởi động ứng dụng, GSAP ScrollTrigger, Web Audio synthesizer, canvas 2D
 ├── assets/             # Thư mục tài nguyên (toàn bộ đồ họa đã được tạo bằng code)
@@ -126,7 +126,7 @@ portfolio/
 
 ---
 
-## ✍️ Hướng Dẫn Chỉnh Sửa & Cập Nhật Nội Dung
+##  Hướng Dẫn Chỉnh Sửa & Cập Nhật Nội Dung
 
 Để cập nhật thông tin cá nhân, bạn **không cần chỉnh sửa code kỹ thuật** trong `scene.js` hay `style.css`. Bạn chỉ cần mở tệp `js/content.js` và chỉnh sửa các trường trong object `CONTENT`:
 
